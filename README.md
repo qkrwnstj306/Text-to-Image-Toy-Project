@@ -18,7 +18,7 @@ Demo 영상
 
 [![Watch the video](./videos/test1.webm)]
 
-<img src="![ezgif com-crop](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/1efae5d3-34cd-4f02-9fc5-a78e4a1a4a47)">
+<img src="![ezgif com-crop](./videos/ezgif.com-crop.gif)">
 
 
 [![Watch the video](./videos/test2.webm)]
