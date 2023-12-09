@@ -6,7 +6,7 @@
 - 그 후, AI service(text-to-image) 를 체험할 수 있다.
 - Text 를 입력하는 동시에 image 는 생성이 되고(정확히는 user 의 입력이 0.5 초 이상 멈추면 생성) 이때, 코드 상으로 구현된 AI model 은 GPU 4 개를 이용해 구현됐기 때문에 최대 4명의 client request 를 처리할 수 있다. 
 - Service 이용을 다했으면, review 를 남길 수 있다. 
-- 이 review 는 server 가 다운되도 .txt 형태로 남아있기 때문에 다시 server 를 가동시키면 불러올 수 있다.
+- 이 review 는 server 가 꺼져도 .txt 형태로 남아있기 때문에 다시 server 를 가동시키면 불러올 수 있다.
 
 ### __init__.py
 - User 가 들어올 때마다 매번 model 을 불러오는 것은 cost 가 굉장히 크기 때문에 server 를 가동시키는 즉시. 4개의 pipe(AI model) 을 불러온다. 
