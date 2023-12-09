@@ -28,17 +28,13 @@
 
 ### videos
 
-Demo 영상
-
-<!-- [![Watch the video](./videos/test1.webm)] -->
-
-![demo1](![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/40613aef-0f45-47d3-ac73-ebd1f02862f1))
-
-<img src="![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/40613aef-0f45-47d3-ac73-ebd1f02862f1)" width="500" height="300">
+[Demo video 1]
 
 ![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/40613aef-0f45-47d3-ac73-ebd1f02862f1)
 
-<!-- [![Watch the video](./videos/test2.webm)]  -->
+[Demo video 2]
+
+![demo2](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/040574c1-b9a0-495e-8fff-0736cfa70506)
 
 
 ### Server
