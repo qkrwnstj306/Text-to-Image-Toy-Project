@@ -20,6 +20,7 @@ Demo 영상
 
 ![ezgif com-crop](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/24f21ed1-d127-4c17-927b-e612f6c5048e)
 
+<img src="https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/24f21ed1-d127-4c17-927b-e612f6c5048e" width="500" height="300">
 
 [![Watch the video](./videos/test2.webm)]
 
