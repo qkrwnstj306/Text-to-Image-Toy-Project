@@ -158,7 +158,7 @@ def generate_image(nickname):
             image_path = f"/generated_images/{nickname}/generated_image_{int(time.time())}.png"
             total_pth = sub_pth + image_path
             os.makedirs(os.path.dirname(total_pth), exist_ok=True)
-            image.save(total_pth, format="PNG")
+            image.save(total_pth, format="PNG") 
 
             used_model.remove(str(model))
             # Return the path to the saved image as JSON

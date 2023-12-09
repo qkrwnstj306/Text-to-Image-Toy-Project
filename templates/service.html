@@ -103,28 +103,24 @@
 
 <!-- Text 입력 부분 -->
 <div>
-    <label for="text_input">Enter Text for Image Generation:</label>
-    <textarea id="text_input" name="text_input" rows="4" cols="50" placeholder="Type your text here..."></textarea>
-    <!-- 버튼을 수동으로 클릭하는 것이 아니라 일정 시간마다 자동으로 서버에 전송 -->
+    <label for="text_input">이미지 생성을 위한 텍스트 입력:</label>
+    <textarea id="text_input" name="text_input" rows="4" cols="50" placeholder="여기에 텍스트를 입력하세요..." oninput="updateOnInput('{{ nickname }}')"></textarea>
+    <!-- 버튼을 수동으로 클릭하는 것이 아니라 입력이 멈추면 일정 시간 후에 자동으로 서버에 전송 -->
     <script>
-        // 이전 텍스트 저장
-        let previousText = "";
-
-        // 페이지 로드 후 5초마다 updateGeneratedImage 함수 호출
-        setInterval(function () {
-            const nickname = '{{ nickname }}';  // Flask에서 렌더링된 닉네임 사용
-            const textInput = document.getElementById("text_input").value;
-
-            // 텍스트가 비어있지 않고 이전 텍스트와 다르면 서버에 전송
-            if (textInput.trim() !== "" && textInput !== previousText) {
+        let inputTimer;
+        // 입력이 멈춘 후 0.5초 동안 입력이 없으면 서버에 전송
+        document.getElementById("text_input").addEventListener("input", function () {
+            clearTimeout(inputTimer);
+            inputTimer = setTimeout(function () {
+                const nickname = '{{ nickname }}';
                 updateGeneratedImage(nickname);
-
-                // 현재 텍스트를 이전 텍스트로 업데이트
-                previousText = textInput;
-            }
-        }, 2000);  // 5초 간격으로 호출 (1000은 1초를 의미)
+            }, 500);  // 0.5초 이후에 호출
+        });
     </script>
 </div>
+
+
+
 
 
 
