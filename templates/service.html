@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service Page</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh; /* 100% viewport height */
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #generated_image {
+            width: 100%;
+            max-width: 512px;
+            height: auto;
+            margin-bottom: 20px;
+            margin-top: 300px;
+        }
+
+        #text_input {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #review_input {
+            width: 50%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        #review-button {
+            width: 50%; 
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button {
+            width: 100%; 
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #reviews-container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        #reviews-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #reviews-list li {
+            margin-bottom: 10px;
+        }
+
+        #reviews-list strong {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        #no-reviews {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Welcome, {{ nickname }}!</h1>
+
+<!-- 이미지 렌더링 부분 -->
+<div>
+    <!-- 이미지가 렌더링될 부분 -->
+    <img id="generated_image" src="{{ url_for('static', filename='initial.png') }}" alt="Rendered Image" width="512" height="512">
+</div>
+
+<!-- Text 입력 부분 -->
+<div>
+    <label for="text_input">Enter Text for Image Generation:</label>
+    <textarea id="text_input" name="text_input" rows="4" cols="50" placeholder="Type your text here..."></textarea>
+    <!-- 버튼을 수동으로 클릭하는 것이 아니라 일정 시간마다 자동으로 서버에 전송 -->
+    <script>
+        // 이전 텍스트 저장
+        let previousText = "";
+
+        // 페이지 로드 후 5초마다 updateGeneratedImage 함수 호출
+        setInterval(function () {
+            const nickname = '{{ nickname }}';  // Flask에서 렌더링된 닉네임 사용
+            const textInput = document.getElementById("text_input").value;
+
+            // 텍스트가 비어있지 않고 이전 텍스트와 다르면 서버에 전송
+            if (textInput.trim() !== "" && textInput !== previousText) {
+                updateGeneratedImage(nickname);
+
+                // 현재 텍스트를 이전 텍스트로 업데이트
+                previousText = textInput;
+            }
+        }, 2000);  // 5초 간격으로 호출 (1000은 1초를 의미)
+    </script>
+</div>
+
+
+
+<!-- 실시간으로 서버에 전달되어야 하는 부분 -->
+
+<!-- 후기 입력 부분 -->
+<!-- 후기를 렌더링할 부분 -->
+<div id="reviews-container">
+    <h2>Reviews:</h2>
+    <ul id="reviews-list">
+        {% for user, reviews in all_reviews.items() %}
+            <li><strong>{{ user }}:</strong></li>
+            <ul>
+                {% for review in reviews %}
+                    <li>{{ review }}</li>
+                {% endfor %}
+            </ul>
+        {% endfor %}
+    </ul>
+    <p id="no-reviews">No reviews available.</p>
+</div>
+
+<label for="review_input">Leave a Review:</label>
+<textarea id="review_input" name="review_input" rows="4" placeholder="Type your review here..."></textarea>
+<button id='review-button' type="button" onclick="leaveReview('{{ nickname }}')">Leave Review</button>
+
+<script>
+    // ArrayBuffer를 Base64로 변환하는 함수
+    function arrayBufferToBase64(buffer) {
+        var binary = '';
+        var bytes = new Uint8Array(buffer);
+        var len = bytes.byteLength;
+        for (var i = 0; i < len; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+    }
+
+    function updateGeneratedImage(nickname) {
+        // Ajax를 사용하여 새로운 이미지를 서버에 요청
+        // 텍스트 입력값 가져오기
+        const textInput = document.getElementById("text_input").value;
+
+        // 텍스트가 비어있으면 아무 동작도 수행하지 않음
+        if (!textInput) {
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    // 서버에서 정상적으로 응답을 받았을 때 수행할 동작
+                    // alert("Generated image updated successfully!");
+
+                    // 서버에서 새로운 이미지 경로를 받아와 이미지 업데이트
+                    const response = JSON.parse(xhr.responseText);
+                    const imageUrl = response.image_path;
+                    const generatedImage = document.getElementById("generated_image");
+                    generatedImage.src = '/static' + imageUrl + '?' + new Date().getTime(); // Add timestamp to force refresh
+                } else {
+                    // 서버에서 오류 응답을 받았을 때 수행할 동작
+                    console.error("Failed to update generated image.");
+                }
+            }
+        };
+
+        // POST 요청으로 새로운 이미지 요청
+        xhr.open("POST", `/generate_image/${nickname}`, true);
+        xhr.responseType = 'text';  // 서버에서 텍스트 형태로 반환
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify({ text: textInput }));  // Use 'text' instead of 'textinput'
+    }
+
+    // 서버에서 후기를 비동기적으로 가져와서 렌더링
+    function fetchReviews() {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    const allReviews = JSON.parse(xhr.responseText);
+
+                    // 후기를 렌더링
+                    const reviewsContainer = document.getElementById("reviews-container");
+                    reviewsContainer.innerHTML = "<h2>Reviews:</h2>";
+
+                    const reviewsList = document.createElement("ul");
+                    reviewsList.id = "reviews-list";
+                    
+                    for (const [user, reviews] of Object.entries(allReviews)) {
+                        const userItem = document.createElement("li");
+                        userItem.innerHTML = `<strong>${user}:</strong>`;
+
+                        const userReviewsList = document.createElement("ul");
+                        for (const review of reviews) {
+                            const reviewItem = document.createElement("li");
+                            reviewItem.textContent = review;
+                            userReviewsList.appendChild(reviewItem);
+                        }
+
+                        userItem.appendChild(userReviewsList);
+                        reviewsList.appendChild(userItem);
+                    }
+
+                    reviewsContainer.appendChild(reviewsList);
+                } else {
+                    console.error("Failed to fetch reviews:", xhr.status);
+                }
+            }
+        };
+
+        xhr.open("GET", `/fetch_reviews`, true);
+        xhr.send();
+    }
+
+    // 서버에 후기를 비동기적으로 전송
+    function leaveReview(nickname) {
+        const reviewText = document.getElementById("review_input").value;
+
+        if (!reviewText) {
+            return;
+        }
+
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    alert("Review sent successfully!");
+                    // 후기 전송 후 서버에서 새로운 후기를 가져와서 렌더링
+                    fetchReviews();
+                } else {
+                    alert("Failed to send review to the server.");
+                }
+            }
+        };
+
+        xhr.open("POST", `/submit_review/${nickname}`, true);
+        xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+        xhr.send(JSON.stringify({ review: reviewText }));
+    }
+
+    // 페이지 로드 시 초기 후기를 가져와서 렌더링
+    document.addEventListener("DOMContentLoaded", function () {
+        fetchReviews();
+    });
+
+    
+    // Function to update reviews
+    function updateReviews() {
+        const xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    const allReviews = JSON.parse(xhr.responseText);
+
+                    // Clear existing reviews
+                    const reviewsList = document.getElementById("reviews-list");
+                    reviewsList.innerHTML = "";
+
+                    // Render new reviews
+                    for (const [user, reviews] of Object.entries(allReviews)) {
+                        const userItem = document.createElement("li");
+                        userItem.innerHTML = `<strong>${user}:</strong>`;
+
+                        const userReviewsList = document.createElement("ul");
+                        for (const review of reviews) {
+                            const reviewItem = document.createElement("li");
+                            reviewItem.textContent = review;
+                            userReviewsList.appendChild(reviewItem);
+                        }
+
+                        userItem.appendChild(userReviewsList);
+                        reviewsList.appendChild(userItem);
+                    }
+                } else {
+                    console.error("Failed to fetch reviews:", xhr.status);
+                }
+            }
+        };
+
+        xhr.open("GET", `/fetch_reviews`, true);
+        xhr.send();
+    }
+
+    // Call updateReviews once on page load
+    document.addEventListener("DOMContentLoaded", function () {
+        updateReviews();
+    });
+
+</script>
+
+
+</body>
+</html>
