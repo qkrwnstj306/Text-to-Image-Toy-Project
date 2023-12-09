@@ -32,9 +32,9 @@ Demo 영상
 
 <!-- [![Watch the video](./videos/test1.webm)] -->
 
-![ezgif com-crop](![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/59fd7cb7-731c-4478-a5f2-6cd20466b510))
+![demo1](![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/40613aef-0f45-47d3-ac73-ebd1f02862f1))
 
-<img src="![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/59fd7cb7-731c-4478-a5f2-6cd20466b510)" width="500" height="300">
+<img src="![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/40613aef-0f45-47d3-ac73-ebd1f02862f1)" width="500" height="300">
 
 <!-- [![Watch the video](./videos/test2.webm)]  -->
 
