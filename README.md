@@ -36,6 +36,8 @@ Demo 영상
 
 <img src="![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/40613aef-0f45-47d3-ac73-ebd1f02862f1)" width="500" height="300">
 
+![demo1](https://github.com/qkrwnstj306/Text-to-Image-Toy-Project/assets/120474819/40613aef-0f45-47d3-ac73-ebd1f02862f1)
+
 <!-- [![Watch the video](./videos/test2.webm)]  -->
 
 
